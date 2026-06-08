@@ -146,7 +146,7 @@ export const TaskTool = Tool.define(
                 ...Object.fromEntries((cfg.experimental?.primary_tools ?? []).map((item) => [item, false])),
               },
               parts,
-            })
+            }).pipe(Effect.timeout("30 minutes"))
 
             return {
               title: params.description,
