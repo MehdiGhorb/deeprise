@@ -17,10 +17,10 @@ import PROMPT_RUNTIME_QA from "./prompt/runtime-qa.txt"
 import PROMPT_USER_LEVEL_TEST from "./prompt/user-level-test.txt"
 import PROMPT_DEVELOPER from "./prompt/developer.txt"
 import PROMPT_ORCHESTRATION from "./prompt/orchestration.txt"
-import PROMPT_MASTER from "./prompt/master.txt"
-import PROMPT_RESEARCH from "./prompt/research.txt"
-import PROMPT_DESIGN_UX from "./prompt/design-ux.txt"
-import PROMPT_OPTIMIZATION from "./prompt/optimization.txt"
+import PROMPT_SUPER from "./prompt/super.txt"
+import PROMPT_CODE_REVIEWER from "./prompt/code-reviewer.txt"
+import PROMPT_DEVOPS_ENGINEER from "./prompt/devops-engineer.txt"
+import PROMPT_SECURITY_ENGINEER from "./prompt/security-engineer.txt"
 import { Permission } from "@/permission"
 import { mergeDeep, pipe, sortBy, values } from "remeda"
 import { Global } from "@opencode-ai/core/global"
@@ -118,8 +118,8 @@ export const layer = Layer.effect(
         const user = Permission.fromConfig(cfg.permission ?? {})
 
         const agents: Record<string, Info> = {
-          master: {
-            name: "master",
+          super: {
+            name: "super",
             description:
               "Primary interface agent. Routes every request through orchestration, developer, test, and runtime QA subagents, then reports back to the user.",
             options: {},
@@ -137,47 +137,7 @@ export const layer = Layer.effect(
               }),
               user,
             ),
-            prompt: PROMPT_MASTER,
-            mode: "primary",
-            native: true,
-            steps: 500,
-          },
-          build: {
-            name: "build",
-            description: "The default agent. Executes tools based on configured permissions.",
-            options: {},
-            permission: Permission.merge(
-              defaults,
-              Permission.fromConfig({
-                question: "allow",
-                plan_enter: "allow",
-              }),
-              user,
-            ),
-            mode: "primary",
-            native: true,
-            steps: 500,
-          },
-          plan: {
-            name: "plan",
-            description: "Plan mode. Disallows all edit tools.",
-            options: {},
-            permission: Permission.merge(
-              defaults,
-              Permission.fromConfig({
-                question: "allow",
-                plan_exit: "allow",
-                external_directory: {
-                  [path.join(Global.Path.data, "plans", "*")]: "allow",
-                },
-                edit: {
-                  "*": "deny",
-                  [path.join(".opencode", "plans", "*.md")]: "allow",
-                  [path.relative(ctx.worktree, path.join(Global.Path.data, path.join("plans", "*.md")))]: "allow",
-                },
-              }),
-              user,
-            ),
+            prompt: PROMPT_SUPER,
             mode: "primary",
             native: true,
             steps: 500,
@@ -377,9 +337,9 @@ export const layer = Layer.effect(
             mode: "subagent",
             native: true,
           },
-          research: {
-            name: "research",
-            description: `Research agent. Conducts deep, thorough research on requirements, best practices, patterns, and industry standards for the application to be built. Use this agent early in the process to ensure comprehensive understanding and planning.`,
+          code_reviewer: {
+            name: "code_reviewer",
+            description: `Expert code reviewer. Conducts comprehensive, rigorous code reviews covering code quality, security, performance, maintainability, and best practices. Use this agent to review code changes before merging to ensure the highest standards.`,
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -391,20 +351,18 @@ export const layer = Layer.effect(
                 grep: "allow",
                 glob: "allow",
                 list: "allow",
-                websearch: "allow",
-                webfetch: "allow",
               }),
               user,
             ),
-            prompt: PROMPT_RESEARCH,
+            prompt: PROMPT_CODE_REVIEWER,
             options: {},
             steps: 350,
             mode: "subagent",
             native: true,
           },
-          design_ux: {
-            name: "design_ux",
-            description: `Design and UX agent. Designs a professional, polished, and exceptional user experience for the application. Use this agent to create comprehensive design systems and UI specifications.`,
+          devops_engineer: {
+            name: "devops_engineer",
+            description: `Expert DevOps engineer. Implements comprehensive DevOps solutions including CI/CD pipelines, infrastructure as code, containerization, monitoring, logging, and deployment automation. Use this agent to set up production-ready DevOps infrastructure.`,
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -421,15 +379,15 @@ export const layer = Layer.effect(
               }),
               user,
             ),
-            prompt: PROMPT_DESIGN_UX,
+            prompt: PROMPT_DEVOPS_ENGINEER,
             options: {},
             steps: 350,
             mode: "subagent",
             native: true,
           },
-          optimization: {
-            name: "optimization",
-            description: `Optimization agent. Optimizes the application for performance, code quality, and production readiness. Use this agent after implementation to add advanced features, optimize performance, and ensure production readiness.`,
+          security_engineer: {
+            name: "security_engineer",
+            description: `Expert security engineer. Implements comprehensive security measures including authentication, authorization, encryption, vulnerability scanning, and security monitoring. Use this agent to ensure the application is secure and compliant.`,
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -441,10 +399,12 @@ export const layer = Layer.effect(
                 grep: "allow",
                 glob: "allow",
                 list: "allow",
+                websearch: "allow",
+                webfetch: "allow",
               }),
               user,
             ),
-            prompt: PROMPT_OPTIMIZATION,
+            prompt: PROMPT_SECURITY_ENGINEER,
             options: {},
             steps: 350,
             mode: "subagent",
@@ -522,7 +482,7 @@ export const layer = Layer.effect(
             if (agent.hidden === true) throw new Error(`default agent "${c.default_agent}" is hidden`)
             return agent.name
           }
-            const visible = Object.values(agents).find((a) => a.mode !== "subagent" && a.hidden !== true && a.name === "master") ||
+            const visible = Object.values(agents).find((a) => a.mode !== "subagent" && a.hidden !== true && a.name === "super") ||
               Object.values(agents).find((a) => a.mode !== "subagent" && a.hidden !== true)
           if (!visible) throw new Error("no primary visible agent found")
           return visible.name
