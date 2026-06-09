@@ -267,7 +267,7 @@ export const layer = Layer.effect(
           },
           test: {
             name: "test",
-            description: `Quality assurance and testing specialist. Creates test plans, writes comprehensive tests, and validates code quality. Use this agent after code development is complete to ensure thorough test coverage and code reliability. This agent may ONLY modify test files; it must not modify main source files. If changes to source are required, report them to the master agent instead of applying persistent edits.`,
+            description: `Quality assurance and testing specialist. Creates test plans, writes comprehensive tests, and validates code quality. Use this agent after code development is complete to ensure thorough test coverage and code reliability. This agent may ONLY modify test files; it must not modify main source files. If changes to source are required, report them to the super agent instead of applying persistent edits.`,
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -467,7 +467,7 @@ export const layer = Layer.effect(
             agents,
             values(),
             sortBy(
-              [(x) => (cfg.default_agent ? x.name === cfg.default_agent : x.name === "master"), "desc"],
+              [(x) => (cfg.default_agent ? x.name === cfg.default_agent : x.name === "super"), "desc"],
               [(x) => x.name, "asc"],
             ),
           )
