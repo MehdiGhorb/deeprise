@@ -335,7 +335,25 @@ build_and_install() {
         exit 1
     fi
 
-    cd "$tmp_dir/repo/packages/deeprise"
+    # Check if the repo is a monorepo (packages/deeprise or packages/opencode) or the deeprise package directly
+    if [ -d "$tmp_dir/repo/packages/deeprise" ]; then
+        cd "$tmp_dir/repo/packages/deeprise"
+    elif [ -d "$tmp_dir/repo/packages/opencode" ]; then
+        cd "$tmp_dir/repo/packages/opencode"
+    elif [ -f "$tmp_dir/repo/package.json" ] && [ -f "$tmp_dir/repo/script/build.ts" ]; then
+        cd "$tmp_dir/repo"
+    else
+        echo -e "${RED}Error: Could not find deeprise package in cloned repository${NC}"
+        echo -e "${MUTED}Expected either packages/deeprise, packages/opencode, or the repo root to contain the deeprise package${NC}"
+        echo -e "${MUTED}Repository structure:${NC}"
+        ls -la "$tmp_dir/repo"
+        if [ -d "$tmp_dir/repo/packages" ]; then
+            echo -e "${MUTED}Packages directory:${NC}"
+            ls -la "$tmp_dir/repo/packages"
+        fi
+        rm -rf "$tmp_dir"
+        exit 1
+    fi
     
     print_message info "${MUTED}Upgrading bun to required version...${NC}"
     if ! bun upgrade; then
