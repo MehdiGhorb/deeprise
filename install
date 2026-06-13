@@ -188,7 +188,7 @@ else
         exit 1
     fi
 
-    repo="MehdiGhorb/autonomous_coding_agent"
+    repo="MehdiGhorb/deeprise"
     
     if [ -z "$requested_version" ]; then
         release_info=$(curl -s "https://api.github.com/repos/$repo/releases/latest")
