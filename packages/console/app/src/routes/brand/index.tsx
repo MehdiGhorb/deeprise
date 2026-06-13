@@ -21,8 +21,8 @@ import wordmarkLightPng from "../../asset/brand/opencode-wordmark-light.png"
 import wordmarkDarkPng from "../../asset/brand/opencode-wordmark-dark.png"
 import wordmarkSimpleLightPng from "../../asset/brand/opencode-wordmark-simple-light.png"
 import wordmarkSimpleDarkPng from "../../asset/brand/opencode-wordmark-simple-dark.png"
-import logoLightSvg from "../../asset/brand/opencode-logo-light.svg"
-import logoDarkSvg from "../../asset/brand/opencode-logo-dark.svg"
+import logoLightSvg from "../../asset/brand/deeprise-black.svg"
+import logoDarkSvg from "../../asset/brand/deeprise-white.svg"
 import logoLightSquareSvg from "../../asset/brand/opencode-logo-light-square.svg"
 import logoDarkSquareSvg from "../../asset/brand/opencode-logo-dark-square.svg"
 import wordmarkLightSvg from "../../asset/brand/opencode-wordmark-light.svg"
@@ -102,7 +102,7 @@ export default function Brand() {
                       />
                     </svg>
                   </button>
-                  <button onClick={() => downloadFile(logoLightSvg, "opencode-logo-light.svg")}>
+                  <button onClick={() => downloadFile(logoLightSvg, "deeprise-black.svg")}>
                     SVG
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path
@@ -129,7 +129,7 @@ export default function Brand() {
                       />
                     </svg>
                   </button>
-                  <button onClick={() => downloadFile(logoDarkSvg, "opencode-logo-dark.svg")}>
+                  <button onClick={() => downloadFile(logoDarkSvg, "deeprise-white.svg")}>
                     SVG
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path
