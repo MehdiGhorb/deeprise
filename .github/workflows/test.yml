@@ -51,8 +51,8 @@ jobs:
 
       - name: Configure git identity
         run: |
-          git config --global user.email "bot@opencode.ai"
-          git config --global user.name "opencode"
+          git config --global user.email "bot@deeprise.ai"
+          git config --global user.name "deeprise"
 
       - name: Cache Turbo
         uses: actions/cache@v4

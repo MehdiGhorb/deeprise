@@ -1,19 +1,19 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "forgeloop",
+  "name": "deeprise",
   "description": "AI-powered development tool",
   "private": true,
   "type": "module",
   "packageManager": "bun@1.3.13",
   "scripts": {
-    "dev": "bun run --cwd packages/opencode --conditions=browser src/index.ts",
+    "dev": "bun run --cwd packages/deeprise --conditions=browser src/index.ts",
     "dev:desktop": "bun --cwd packages/desktop-electron dev",
     "dev:web": "bun --cwd packages/app dev",
     "dev:console": "ulimit -n 10240 2>/dev/null; bun run --cwd packages/console/app dev",
     "dev:storybook": "bun --cwd packages/storybook storybook",
     "lint": "oxlint",
     "typecheck": "bun turbo typecheck",
-    "postinstall": "bun run --cwd packages/opencode fix-node-pty",
+    "postinstall": "bun run --cwd packages/deeprise fix-node-pty",
     "prepare": "husky",
     "random": "echo 'Random script'",
     "hello": "echo 'Hello World!'",
@@ -108,7 +108,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/anomalyco/forgeloop"
+    "url": "https://github.com/anomalyco/deeprise"
   },
   "license": "MIT",
   "prettier": {

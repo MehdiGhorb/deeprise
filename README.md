@@ -53,4 +53,4 @@ Two installation methods:
 
 This project was inspired by and built upon the foundations of OpenCode. Special thanks to the OpenCode community for their contributions and innovation.
 
-https://opencode.ai
+https://deeprise.ai

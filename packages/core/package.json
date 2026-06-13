@@ -11,7 +11,7 @@
     "typecheck": "tsgo --noEmit"
   },
   "bin": {
-    "opencode": "./bin/opencode"
+    "deeprise": "./bin/deeprise"
   },
   "exports": {
     "./*": "./src/*.ts"

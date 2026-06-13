@@ -1,0 +1,4 @@
+{
+  "$schema": "https://deeprise.ai/config.json",
+  "default_agent": "developer"
+}

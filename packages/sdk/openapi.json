@@ -1,8 +1,8 @@
 {
   "openapi": "3.1.1",
   "info": {
-    "title": "opencode",
-    "description": "opencode api",
+    "title": "deeprise",
+    "description": "deeprise api",
     "version": "1.0.0"
   },
   "paths": {
@@ -161,8 +161,8 @@
     "/global/upgrade": {
       "post": {
         "operationId": "global.upgrade",
-        "summary": "Upgrade opencode",
-        "description": "Upgrade opencode to the specified version or latest if not specified.",
+        "summary": "Upgrade deeprise",
+        "description": "Upgrade deeprise to the specified version or latest if not specified.",
         "responses": {
           "200": {
             "description": "Upgrade result",
@@ -11130,7 +11130,7 @@
         "enum": ["DEBUG", "INFO", "WARN", "ERROR"]
       },
       "ServerConfig": {
-        "description": "Server configuration for opencode serve and web commands",
+        "description": "Server configuration for deeprise serve and web commands",
         "type": "object",
         "properties": {
           "port": {
@@ -11148,7 +11148,7 @@
             "type": "boolean"
           },
           "mdnsDomain": {
-            "description": "Custom domain name for mDNS service (default: opencode.local)",
+            "description": "Custom domain name for mDNS service (default: deeprise.local)",
             "type": "string"
           },
           "cors": {
@@ -11704,7 +11704,7 @@
             "$ref": "#/components/schemas/ServerConfig"
           },
           "command": {
-            "description": "Command configuration, see https://opencode.ai/docs/commands",
+            "description": "Command configuration, see https://deeprise.ai/docs/commands",
             "type": "object",
             "propertyNames": {
               "type": "string"
@@ -11858,7 +11858,7 @@
             }
           },
           "agent": {
-            "description": "Agent configuration, see https://opencode.ai/docs/agents",
+            "description": "Agent configuration, see https://deeprise.ai/docs/agents",
             "type": "object",
             "properties": {
               "plan": {

@@ -27,4 +27,4 @@ We will announce security updates in the following ways:
 - **GitHub Releases:** Details of the fix will be included in the release notes.
 - **Changelog:** The changelog will highlight security-related fixes.
 
-Thank you for helping us keep ForgeLoop secure!
+Thank you for helping us keep DeepRise secure!
