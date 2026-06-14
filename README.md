@@ -26,7 +26,7 @@ And many more...
 
 ---
 
-## 🛠️ Installation
+## Installation
 
 Choose the setup that fits your workflow:
 
@@ -47,6 +47,6 @@ Choose the setup that fits your workflow:
 
 ---
 
-## 📝 Acknowledgments
+## Acknowledgments
 
 See [ACKNOWLEDGMENTS.md](ACKNOWLEDGMENTS.md) for the full acknowledgments note.
