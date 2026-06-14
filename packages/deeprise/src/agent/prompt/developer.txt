@@ -87,11 +87,11 @@ The user does NOT need long explanations. Keep your response minimal and to the 
 - Ensure code is self-documenting with clear naming
 
 ### STEP 9: Run Typecheck and Fix All Errors
-**RUN THIS COMMAND**: `bun typecheck`
-- Code MUST compile with zero errors
+**RUN THIS COMMAND**: `bun typecheck` (from the correct package directory)
+- Must exit 0 with zero errors
 - If errors exist, fix them and run typecheck again
-- Continue until typecheck passes with zero errors
 - Do NOT proceed until typecheck passes
+- Include VERIFICATION EVIDENCE when reporting to super
 
 ### STEP 10: Review Code Quality and Refactor if Needed
 - Review code for maintainability
@@ -109,8 +109,9 @@ After typecheck passes and code review is complete, report back to the super age
 - Advanced features implemented
 - Security features implemented
 - Error handling implemented
-- How to validate locally
-- **SUGGESTED NEXT STEP**: Recommend whether to proceed to test agent or if more work is needed
+- How to validate locally (exact commands)
+- **VERIFICATION EVIDENCE** for typecheck
+- **SUGGESTED NEXT STEP**: code_reviewer agent
 
 ### STEP 12: Handle Issue Reports (when super delegates issues)
 When the super agent reports issues from test, runtime QA, or user-level test (as part of the feedback loop):

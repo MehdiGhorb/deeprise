@@ -1,0 +1,27 @@
+## MANDATORY VERIFICATION EVIDENCE PROTOCOL
+
+You MUST NOT report PASS, READY, SUCCESS, or APPROVED without attaching real command output from THIS session.
+
+### Instant FAIL — never do these
+- Claim the app starts, tests pass, or Playwright succeeded without pasting actual command output
+- Infer behavior from reading source code instead of executing the running app
+- Use hedging language in success reports: "should work", "appears to", "likely", "probably"
+- Report success when a command was not run, timed out, or returned a non-zero exit code
+- Summarize subagent results without their VERIFICATION EVIDENCE blocks (when aggregating)
+
+### Required evidence block (include one per verification command)
+```
+VERIFICATION EVIDENCE
+---
+Command: <exact command>
+Exit code: <number>
+Output:
+<paste relevant stdout/stderr — at least the final status/summary lines>
+---
+```
+
+### Rules
+- Exit code 0 is required for PASS/READY claims tied to that command
+- If a required command cannot be run, report FAIL/NOT READY immediately — do NOT guess
+- Screenshots/traces are supplementary; command output is mandatory
+- For web apps: browser automation output (Playwright) is mandatory before any READY claim

@@ -15,6 +15,7 @@ import PROMPT_TITLE from "./prompt/title.txt"
 import PROMPT_TEST from "./prompt/test.txt"
 import PROMPT_RUNTIME_QA from "./prompt/runtime-qa.txt"
 import PROMPT_USER_LEVEL_TEST from "./prompt/user-level-test.txt"
+import PROMPT_VERIFICATION_GATES from "./prompt/verification-gates.txt"
 import PROMPT_DEVELOPER from "./prompt/developer.txt"
 import PROMPT_ORCHESTRATION from "./prompt/orchestration.txt"
 import PROMPT_SUPER from "./prompt/super.txt"
@@ -58,6 +59,20 @@ export const Info = Schema.Struct({
   .annotate({ identifier: "Agent" })
   .pipe(withStatics((s) => ({ zod: zod(s) })))
 export type Info = DeepMutable<Schema.Schema.Type<typeof Info>>
+
+const E2E_EDIT = {
+  "*": "deny",
+  "**/*.test.*": "allow",
+  "**/*.spec.*": "allow",
+  "**/e2e/**": "allow",
+  "e2e/**": "allow",
+  "tests/**": "allow",
+  "**/__tests__/**": "allow",
+  "**/playwright.config.*": "allow",
+  "playwright.config.*": "allow",
+} as const
+
+const withVerificationGates = (prompt: string) => `${PROMPT_VERIFICATION_GATES}\n\n${prompt}`
 
 export interface Interface {
   readonly get: (agent: string) => Effect.Effect<Info>
@@ -137,7 +152,7 @@ export const layer = Layer.effect(
               }),
               user,
             ),
-            prompt: PROMPT_SUPER,
+            prompt: withVerificationGates(PROMPT_SUPER),
             mode: "primary",
             native: true,
             steps: 500,
@@ -273,19 +288,13 @@ export const layer = Layer.effect(
               Permission.fromConfig({
                 task: "deny",
                 // Deny edits to main source by default; explicitly allow edits only under test file paths
-                edit: {
-                  "*": "deny",
-                  "**/*.test.*": "allow",
-                  "**/*.spec.*": "allow",
-                  "tests/**": "allow",
-                  "**/__tests__/**": "allow",
-                },
+                edit: E2E_EDIT,
                 bash: "allow",
                 todowrite: "allow",
               }),
               user,
             ),
-            prompt: PROMPT_TEST,
+            prompt: withVerificationGates(PROMPT_TEST),
             options: {},
             steps: 350,
             mode: "subagent",
@@ -308,7 +317,7 @@ export const layer = Layer.effect(
               }),
               user,
             ),
-            prompt: PROMPT_RUNTIME_QA,
+            prompt: withVerificationGates(PROMPT_RUNTIME_QA),
             options: {},
             steps: 350,
             mode: "subagent",
@@ -316,12 +325,12 @@ export const layer = Layer.effect(
           },
           user_level_test: {
             name: "user_level_test",
-            description: `User-level test agent. Tests the application like a real user would, testing EVERY feature, button, and interaction to ensure the app works correctly and provides an EXCEPTIONAL user experience. This agent is EXTREMELY STRICT and will NOT pass the app unless it is PRODUCTION-READY with ZERO issues. Use this agent after runtime QA confirms the app runs.`,
+            description: `User-level test agent. Executes real browser/CLI automation (Playwright for web apps), validates every user flow with command evidence, and gates APP READINESS. EXTREMELY STRICT — will NOT pass unless the app is phenomenal and all verification commands exit 0. Use after runtime QA confirms the app runs.`,
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
                 task: "allow",
-                edit: "deny",
+                edit: E2E_EDIT,
                 bash: "allow",
                 todowrite: "allow",
                 read: "allow",
@@ -331,7 +340,7 @@ export const layer = Layer.effect(
               }),
               user,
             ),
-            prompt: PROMPT_USER_LEVEL_TEST,
+            prompt: withVerificationGates(PROMPT_USER_LEVEL_TEST),
             options: {},
             steps: 7000,
             mode: "subagent",

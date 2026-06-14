@@ -98,7 +98,8 @@ const table = sqliteTable("session", {
 - Test actual implementation, do not duplicate logic into tests
 - Tests cannot run from repo root (guard: `do-not-run-tests-from-root`); run from package dirs like `packages/deeprise`.
 - Always run the app to verify there are nor errors
-- For web apps, ALWAYS use Playwright or another end-to-end flow test when available; for backend or library changes, use the narrowest targeted test or package check. (The choice of what framework to use is up to you, unless the user specifies otherwise.)
+- For web apps, ALWAYS use Playwright end-to-end tests (`bun run test:e2e` from the app package); for backend or library changes, use the narrowest targeted test or package check.
+- Never claim tests pass or the app is ready without VERIFICATION EVIDENCE: paste the exact command, exit code, and output summary.
 - You must test the app after creating a new app or after changing the code at any level, even if the user doesn't explicitly ask you to.
 - Add the test to TODO list if it's not already there, and make sure to mark it done after implementing it.
 
@@ -109,6 +110,6 @@ const table = sqliteTable("session", {
 ## Change Verification
 
 - When you change code, verify it with the narrowest appropriate test or runtime check before you finish.
-- For web apps, run the app and do a user-level smoke test, then use Playwright or another flow test when available.
+- For web apps, run Playwright (`bun run test:e2e`) and attach command output as evidence. Do not report ready without Playwright exit 0.
 - If a test, smoke check, or runtime check fails, fix the issue and rerun the same verification until it passes or you hit a real blocker.
 - Skip this only for purely informational requests or changes that do not affect code behavior.

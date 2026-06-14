@@ -6,6 +6,7 @@ import { MessageV2 } from "../session/message-v2"
 import { Agent } from "../agent/agent"
 import type { SessionPrompt } from "../session/prompt"
 import { Config } from "@/config/config"
+import { Permission } from "@/permission"
 import { Effect, Schema } from "effect"
 
 export interface TaskPromptOps {
@@ -57,8 +58,8 @@ export const TaskTool = Tool.define(
         return yield* Effect.fail(new Error(`Unknown agent type: ${params.subagent_type} is not a valid agent type`))
       }
 
-      const canTask = next.permission.some((rule) => rule.permission === id)
-      const canTodo = next.permission.some((rule) => rule.permission === "todowrite")
+      const canTask = Permission.evaluate("task", "*", next.permission).action === "allow"
+      const canTodo = Permission.evaluate("todowrite", "*", next.permission).action === "allow"
 
       const taskID = params.task_id
       const session = taskID

@@ -42,7 +42,7 @@ const seed = Effect.fn("TaskToolTest.seed")(function* (title = "Pinned") {
     id: MessageID.ascending(),
     role: "user",
     sessionID: chat.id,
-    agent: "build",
+    agent: "super",
     model: ref,
     time: { created: Date.now() },
   })
@@ -51,8 +51,8 @@ const seed = Effect.fn("TaskToolTest.seed")(function* (title = "Pinned") {
     role: "assistant",
     parentID: user.id,
     sessionID: chat.id,
-    mode: "build",
-    agent: "build",
+    mode: "super",
+    agent: "super",
     cost: 0,
     path: { cwd: "/tmp", root: "/tmp" },
     tokens: { input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
@@ -84,8 +84,8 @@ function reply(input: SessionPrompt.PromptInput, text: string): MessageV2.WithPa
       role: "assistant",
       parentID: input.messageID ?? MessageID.ascending(),
       sessionID: input.sessionID,
-      mode: input.agent ?? "general",
-      agent: input.agent ?? "general",
+      mode: input.agent ?? "explore",
+      agent: input.agent ?? "explore",
       cost: 0,
       path: { cwd: "/tmp", root: "/tmp" },
       tokens: { input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
@@ -112,10 +112,10 @@ describe("tool.task", () => {
       () =>
         Effect.gen(function* () {
           const agent = yield* Agent.Service
-          const build = yield* agent.get("build")
+          const superAgent = yield* agent.get("super")
           const registry = yield* ToolRegistry.Service
           const get = Effect.fnUntraced(function* () {
-            const tools = yield* registry.tools({ ...ref, agent: build })
+            const tools = yield* registry.tools({ ...ref, agent: superAgent })
             return tools.find((tool) => tool.id === TaskTool.id)?.description ?? ""
           })
           const first = yield* get()
@@ -125,13 +125,11 @@ describe("tool.task", () => {
 
           const alpha = first.indexOf("- alpha: Alpha agent")
           const explore = first.indexOf("- explore:")
-          const general = first.indexOf("- general:")
           const zebra = first.indexOf("- zebra: Zebra agent")
 
           expect(alpha).toBeGreaterThan(-1)
           expect(explore).toBeGreaterThan(alpha)
-          expect(general).toBeGreaterThan(explore)
-          expect(zebra).toBeGreaterThan(general)
+          expect(zebra).toBeGreaterThan(explore)
         }),
       {
         config: {
@@ -155,10 +153,10 @@ describe("tool.task", () => {
       () =>
         Effect.gen(function* () {
           const agent = yield* Agent.Service
-          const build = yield* agent.get("build")
+          const superAgent = yield* agent.get("super")
           const registry = yield* ToolRegistry.Service
           const description =
-            (yield* registry.tools({ ...ref, agent: build })).find((tool) => tool.id === TaskTool.id)?.description ?? ""
+            (yield* registry.tools({ ...ref, agent: superAgent })).find((tool) => tool.id === TaskTool.id)?.description ?? ""
 
           expect(description).toContain("- alpha: Alpha agent")
           expect(description).not.toContain("- zebra: Zebra agent")
@@ -201,13 +199,13 @@ describe("tool.task", () => {
           {
             description: "inspect bug",
             prompt: "look into the cache key path",
-            subagent_type: "general",
+            subagent_type: "explore",
             task_id: child.id,
           },
           {
             sessionID: chat.id,
             messageID: assistant.id,
-            agent: "build",
+            agent: "super",
             abort: new AbortController().signal,
             extra: { promptOps },
             messages: [],
@@ -235,17 +233,17 @@ describe("tool.task", () => {
         const calls: unknown[] = []
         const promptOps = stubOps()
 
-        const exec = (extra?: Record<string, any>) =>
+        const exec = (extra?: Record<string, unknown>) =>
           def.execute(
             {
               description: "inspect bug",
               prompt: "look into the cache key path",
-              subagent_type: "general",
+              subagent_type: "explore",
             },
             {
               sessionID: chat.id,
               messageID: assistant.id,
-              agent: "build",
+              agent: "super",
               abort: new AbortController().signal,
               extra: { promptOps, ...extra },
               messages: [],
@@ -263,11 +261,11 @@ describe("tool.task", () => {
         expect(calls).toHaveLength(1)
         expect(calls[0]).toEqual({
           permission: "task",
-          patterns: ["general"],
+          patterns: ["explore"],
           always: ["*"],
           metadata: {
             description: "inspect bug",
-            subagent_type: "general",
+            subagent_type: "explore",
           },
         })
       }),
@@ -288,13 +286,13 @@ describe("tool.task", () => {
           {
             description: "inspect bug",
             prompt: "look into the cache key path",
-            subagent_type: "general",
+            subagent_type: "explore",
             task_id: "ses_missing",
           },
           {
             sessionID: chat.id,
             messageID: assistant.id,
-            agent: "build",
+            agent: "super",
             abort: new AbortController().signal,
             extra: { promptOps },
             messages: [],
@@ -328,12 +326,12 @@ describe("tool.task", () => {
             {
               description: "inspect bug",
               prompt: "look into the cache key path",
-              subagent_type: "reviewer",
+              subagent_type: "explore",
             },
             {
               sessionID: chat.id,
               messageID: assistant.id,
-              agent: "build",
+              agent: "super",
               abort: new AbortController().signal,
               extra: { promptOps },
               messages: [],
@@ -351,6 +349,11 @@ describe("tool.task", () => {
               action: "deny",
             },
             {
+              permission: "task",
+              pattern: "*",
+              action: "deny",
+            },
+            {
               permission: "bash",
               pattern: "*",
               action: "allow",
@@ -362,6 +365,7 @@ describe("tool.task", () => {
             },
           ])
           expect(seen?.tools).toEqual({
+            task: false,
             todowrite: false,
             bash: false,
             read: false,
@@ -369,14 +373,6 @@ describe("tool.task", () => {
         }),
       {
         config: {
-          agent: {
-            reviewer: {
-              mode: "subagent",
-              permission: {
-                task: "allow",
-              },
-            },
-          },
           experimental: {
             primary_tools: ["bash", "read"],
           },

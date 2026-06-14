@@ -704,6 +704,47 @@ test("defaultAgent returns orchestration when build is disabled and default_agen
   })
 })
 
+test("test agent allows e2e and playwright config edits but denies src", async () => {
+  await using tmp = await tmpdir()
+  await Instance.provide({
+    directory: tmp.path,
+    fn: async () => {
+      const testAgent = await load(tmp.path, (svc) => svc.get("test"))
+      expect(testAgent).toBeDefined()
+      expect(Permission.evaluate("edit", "src/app.ts", testAgent!.permission).action).toBe("deny")
+      expect(Permission.evaluate("edit", "e2e/app.spec.ts", testAgent!.permission).action).toBe("allow")
+      expect(Permission.evaluate("edit", "playwright.config.ts", testAgent!.permission).action).toBe("allow")
+    },
+  })
+})
+
+test("user_level_test agent allows e2e edits and task spawning", async () => {
+  await using tmp = await tmpdir()
+  await Instance.provide({
+    directory: tmp.path,
+    fn: async () => {
+      const agent = await load(tmp.path, (svc) => svc.get("user_level_test"))
+      expect(agent).toBeDefined()
+      expect(Permission.evaluate("edit", "src/app.ts", agent!.permission).action).toBe("deny")
+      expect(Permission.evaluate("edit", "e2e/smoke.spec.ts", agent!.permission).action).toBe("allow")
+      expect(Permission.evaluate("edit", "playwright.config.ts", agent!.permission).action).toBe("allow")
+      expect(Permission.evaluate("task", "*", agent!.permission).action).toBe("allow")
+    },
+  })
+})
+
+test("super agent prompt includes verification gates", async () => {
+  await using tmp = await tmpdir()
+  await Instance.provide({
+    directory: tmp.path,
+    fn: async () => {
+      const superAgent = await load(tmp.path, (svc) => svc.get("super"))
+      expect(superAgent?.prompt).toContain("VERIFICATION EVIDENCE")
+      expect(superAgent?.prompt).toContain("Evidence Validation")
+    },
+  })
+})
+
 test("defaultAgent throws when all primary agents are disabled", async () => {
   await using tmp = await tmpdir({
     config: {

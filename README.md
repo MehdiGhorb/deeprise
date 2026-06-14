@@ -1,56 +1,52 @@
-# DeepRise - Long-running coding agent that gets sh*t done
 
-DeepRise is an autonomous multi-agent AI coding system that builds, tests, and improves apps end-to-end with minimal input. Once given a direction, swarms of agents continue working independently until the task is done — including proper real-user-style testing and iteration.
+<p align="center">
+   <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="packages/console/app/src/asset/brand/deeprise-white-png.png">
+      <img alt="DeepRise logo" src="packages/console/app/src/asset/brand/deeprise-black-png.png" width="240">
+   </picture>
+</p>
+
+# Open-source long-running coding agents that work in parallel
+
+DeepRise is a multi-agent system that autonomously plans, builds, tests, and improves software using long-running AI agents working in parallel.
 
 ![DeepRise Demo](demo/sample.png)
 ![DeepRise Structure](demo/agent_chart_arch.jpg)
 
 ---
 
-## 🤖 Agents
+## 🤖 Example of Agents
 
-1. **Super Agent**: Acts as the CEO of the agent swarm — coordinates all other agents, receives and consolidates their feedback, sets strategies, and instructs each agent on what to do to drive the project forward.
-2. **Orchestration Agent**: Designs software architecture, creates implementation plans, and generates detailed TODO lists for developers.
-3. **Developer Agent**: Implements features, writes code, and coordinates with the test agent to ensure functionality.
-4. **Test Agent**: Creates and runs comprehensive tests to validate code quality and reliability.
-5. **User-Level Test Agent**: Simulates real-world user interactions to identify issues like a real human user.
-6. **Runtime QA Agent**: Runs the application in an isolated environment, validates real user flows, and coordinates fixes with other agents.
-7. **Explore Agent**: Searches and analyzes codebases to answer questions or locate specific patterns.
-8. **Code Review Agent**: Reviews code for adherence to best practices, readability, and maintainability.
-9. **Security Agent**: Identifies and mitigates security vulnerabilities in the code.
-10. **DevOps Agent**: Automates deployment pipelines, monitors infrastructure, pushes to github, and ensures smooth operations.
+1. **Super Agent**: Acts as the manager of all the agents
+2. **Orchestration Agent**: Designs software architecture
+3. **Developer Agent**: Implements features and writes code
+4. **Test Agent**: Creates and runs tests
 
----
-
-## 🧠 Memory
-
-DeepRise uses a Retrieval-Augmented Generation (RAG) approach to manage memory efficiently, ensuring relevant context is always available.
+And many more...
 
 ---
 
 ## 🛠️ Installation
 
-```bash
-git clone https://github.com/MehdiGhorb/deeprise.git
-cd deeprise
-```
+Choose the setup that fits your workflow:
 
-Two installation methods:
+1. **Install from the hosted installer**
 
-1. **Install from Remote Repository**:
    ```bash
+   curl -fsSL https://deeprise.dev/install | bash
+   ```
+
+2. **Install from a local clone**
+
+   ```bash
+   git clone https://github.com/MehdiGhorb/deeprise.git
+   cd deeprise
    bash install
+   # or: bash install --local for installation from local repo
    ```
 
-2. **Install from Local Repository**:
-   ```bash
-   bash install --local
-   ```
-   
 ---
 
 ## 📝 Acknowledgments
 
-This project was inspired by and built upon the foundations of OpenCode. Special thanks to the OpenCode community for their contributions and innovation.
-
-https://deeprise.ai
+See [ACKNOWLEDGMENTS.md](ACKNOWLEDGMENTS.md) for the full acknowledgments note.
