@@ -15,7 +15,7 @@ DeepRise is a multi-agent system that autonomously plans, builds, tests, and imp
 
 ---
 
-## 🤖 Example of Agents
+## Example of Agents
 
 1. **Super Agent**: Acts as the manager of all the agents
 2. **Orchestration Agent**: Designs software architecture
